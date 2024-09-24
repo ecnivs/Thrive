@@ -4,7 +4,7 @@ app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
 # Dummy users for login
-users = {"vince q": "password123",
+users = {"vince": "password123",
          "blossom": "securepass"}
 
 @app.route('/')

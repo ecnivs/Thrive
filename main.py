@@ -31,7 +31,8 @@ with app.app_context():
 def home():
     if 'username' in session:
         return render_template('index.html', username=session['username'])
-    return redirect(url_for('login_page'))
+    else:
+        return redirect(url_for('login_page'))
 
 @app.route('/login')
 def login_page():
@@ -98,6 +99,15 @@ def user_profile(user_id):
     user = User.query.get(user_id)
     profile = Profile.query.filter_by(user_id=user_id).first()
     return render_template('user_profile.html', user=user, profile=profile)
+
+@app.route('/search', methods=['GET', 'POST'])
+def search_users():
+    if request.method == 'POST':
+        search_query = request.form['search_query']
+        users = User.query.filter(User.username.ilike(f'%{search_query}%')).all()  # Use ILIKE for case-insensitive search
+        return render_template('search_results.html', users=users, search_query=search_query)
+    
+    return render_template('search.html')
 
 @app.route('/logout')
 def logout():

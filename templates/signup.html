@@ -52,11 +52,29 @@
         .login-link a:hover {
             text-decoration: underline;
         }
+        .error-message {
+            color: red; /* Error message color */
+            margin-bottom: 10px;
+            text-align: center; /* Center the error message */
+        }
     </style>
 </head>
 <body>
     <div class="signup-box">
         <h2>Sign Up</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                <div class="error-message">
+                    <ul>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endwith %}
+        
         <form action="{{ url_for('signup') }}" method="POST">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
@@ -66,16 +84,6 @@
             <p>Already have an account? <a href="{{ url_for('login_page') }}">Login here</a></p>
         </div>
     </div>
-{% with messages = get_flashed_messages(with_categories=True) %}
-    {% if messages %}
-        <ul>
-        {% for category, message in messages %}
-            <li class="{{ category }}">{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-{% endwith %}
-
 </body>
 </html>
 

@@ -51,25 +51,20 @@ def signup():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        
-        # Correct hash method
-        hashed_password = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
 
-        # Check if the user already exists
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
-            return "User already exists. Please login or choose another username."
+            flash("Username already taken. Please choose a different one.", "error")
+            return render_template('signup.html')  # Render the signup template again
 
-        # Create a new user and store in database
-        new_user = User(username=username, password=hashed_password)
+        new_user = User(username=username, password=generate_password_hash(password))
         db.session.add(new_user)
         db.session.commit()
 
-        session['username'] = username
-        return redirect(url_for('home'))
+        flash("Registration successful! You can now log in.", "success")
+        return redirect(url_for('login_page'))
 
-    return render_template('signup.html')
-
+    return render_template('signup.html') 
 
 @app.route('/logout')
 def logout():

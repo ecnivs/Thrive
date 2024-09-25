@@ -98,23 +98,29 @@ def profile_form(user_id):
         name = request.form['name']
         bio = request.form['bio']
 
-        # Handle the picture upload
         if 'picture' in request.files:
             file = request.files['picture']
             if file.filename:
                 filename = secure_filename(file.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                file.save(file_path)
 
-                # If profile exists, update the profile picture
                 if profile:
+                    if profile.profile_picture:
+                        old_picture_path = os.path.join(app.config['UPLOAD_FOLDER'], profile.profile_picture)
+                        if os.path.exists(old_picture_path):
+                            os.remove(old_picture_path)
+                    
+                    # Update profile picture
                     profile.profile_picture = filename
                 else:
                     # If profile does not exist, create it
                     profile = Profile(user_id=user_id, name=name, bio=bio, profile_picture=filename)
                     db.session.add(profile)
 
-        # If the profile exists, just update the name and bio
+                # Save the new picture
+                file.save(file_path)
+
+        # Update name and bio
         if profile:
             profile.name = name
             profile.bio = bio
@@ -128,7 +134,6 @@ def profile_form(user_id):
         return redirect(url_for('user_profile', user_id=user_id))
 
     return render_template('profile_form.html', user_id=user_id, profile=profile)
-
 
 @app.route('/user/<int:user_id>')
 def user_profile(user_id):

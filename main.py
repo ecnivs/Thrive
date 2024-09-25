@@ -109,7 +109,6 @@ def user_profile(user_id):
 
     return render_template('user_profile.html', profile=profile, user=user)
 
-
 @app.route('/search', methods=['GET', 'POST'])
 def search_users():
     if request.method == 'POST':

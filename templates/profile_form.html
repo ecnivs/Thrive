@@ -80,7 +80,7 @@
         {% endwith %}
 
         <form action="{{ url_for('profile_form', user_id=user_id) }}" method="POST">
-            <input type="text" name="name" placeholder="Full Name" value="{{ profile.name }}" required>
+            <input type="text" name="name" placeholder="Name" value="{{ profile.name }}" required>
             <textarea name="bio" placeholder="Tell us about yourself..." required>{{ profile.bio }}</textarea>
             <button type="submit">Update Profile</button>
         </form>

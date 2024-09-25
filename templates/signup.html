@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Sign Up Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,22 +14,22 @@
             background-color: #f5f5f5;
             margin: 0;
         }
-        .login-box {
+        .signup-box {
             background-color: white;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             width: 300px;
-            box-sizing: border-box; /* Ensures padding is included in the width */
+            box-sizing: border-box;
         }
-        .login-box input {
+        .signup-box input {
             display: block;
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
-            box-sizing: border-box; /* Prevents overflow of input box */
+            box-sizing: border-box;
         }
-        .login-box button {
+        .signup-box button {
             padding: 10px;
             width: 100%;
             background-color: #007bff;
@@ -38,32 +38,32 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .login-box button:hover {
+        .signup-box button:hover {
             background-color: #0056b3;
         }
-        .signup-link {
+        .login-link {
             text-align: center;
             margin-top: 15px;
         }
-        .signup-link a {
+        .login-link a {
             color: #007bff;
             text-decoration: none;
         }
-        .signup-link a:hover {
+        .login-link a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <h2>Login</h2>
-        <form action="{{ url_for('login') }}" method="POST">
+    <div class="signup-box">
+        <h2>Sign Up</h2>
+        <form action="{{ url_for('signup') }}" method="POST">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
+            <button type="submit">Sign Up</button>
         </form>
-        <div class="signup-link">
-            <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a></p>
+        <div class="login-link">
+            <p>Already have an account? <a href="{{ url_for('login_page') }}">Login here</a></p>
         </div>
     </div>
 </body>

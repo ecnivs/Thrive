@@ -86,8 +86,14 @@ def signup():
 
 @app.route('/profile/<int:user_id>', methods=['GET', 'POST'])
 def profile_form(user_id):
+    # Get the profile associated with the user_id
     profile = Profile.query.filter_by(user_id=user_id).first()
     
+    # Check if the logged-in user is trying to edit their own profile
+    if 'user_id' not in session or session['user_id'] != user_id:
+        flash("You are not authorized to edit this profile.", "error")
+        return redirect(url_for('home'))
+
     if request.method == 'POST':
         name = request.form['name']
         bio = request.form['bio']
@@ -122,6 +128,7 @@ def profile_form(user_id):
         return redirect(url_for('user_profile', user_id=user_id))
 
     return render_template('profile_form.html', user_id=user_id, profile=profile)
+
 
 @app.route('/user/<int:user_id>')
 def user_profile(user_id):

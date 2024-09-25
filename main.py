@@ -16,6 +16,13 @@ class User(db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
 
+# Profile model
+class Profile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    name = db.Column(db.String(150), nullable=False)
+    bio = db.Column(db.Text, nullable=False)
+
 # Create database tables
 with app.app_context():
     db.create_all()
@@ -24,8 +31,7 @@ with app.app_context():
 def home():
     if 'username' in session:
         return render_template('index.html', username=session['username'])
-    else:
-        return redirect(url_for('login_page'))
+    return redirect(url_for('login_page'))
 
 @app.route('/login')
 def login_page():
@@ -41,6 +47,7 @@ def login():
 
     if user and check_password_hash(user.password, password):
         session['username'] = username
+        session['user_id'] = user.id  # Store user_id in session
         return redirect(url_for('home'))
     else:
         flash("Invalid credentials, please try again.", "error")
@@ -60,17 +67,40 @@ def signup():
         new_user = User(username=username, password=generate_password_hash(password))
         db.session.add(new_user)
         db.session.commit()
+        
+        session['username'] = username  # Store username in session
+        session['user_id'] = new_user.id  # Store user_id in session
+        flash("Registration successful! Please fill out your profile.", "success")
+        return redirect(url_for('profile_form', user_id=new_user.id))
 
-        flash("Registration successful! You can now log in.", "success")
-        return redirect(url_for('login_page'))
+    return render_template('signup.html')
 
-    return render_template('signup.html') 
+@app.route('/profile/<int:user_id>', methods=['GET', 'POST'])
+def profile_form(user_id):
+    if request.method == 'POST':
+        name = request.form['name']
+        bio = request.form['bio']
+        
+        new_profile = Profile(user_id=user_id, name=name, bio=bio)
+        db.session.add(new_profile)
+        db.session.commit()
+        
+        flash("Profile saved successfully!", "success")
+        return redirect(url_for('user_profile', user_id=user_id))
+    
+    return render_template('profile_form.html', user_id=user_id)
+
+@app.route('/user/<int:user_id>')
+def user_profile(user_id):
+    user = User.query.get(user_id)
+    profile = Profile.query.filter_by(user_id=user_id).first()
+    return render_template('user_profile.html', user=user, profile=profile)
 
 @app.route('/logout')
 def logout():
     session.pop('username', None)
+    session.pop('user_id', None)
     return redirect(url_for('login_page'))
 
 if __name__ == "__main__":
     app.run(debug=True)
-

@@ -20,8 +20,8 @@ class User(db.Model):
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    name = db.Column(db.String(150), nullable=False)
-    bio = db.Column(db.Text, nullable=False)
+    name = db.Column(db.String(150), nullable=True)  # Nullable for profile creation
+    bio = db.Column(db.Text, nullable=True)  # Nullable for profile creation
 
 # Create database tables
 with app.app_context():
@@ -31,8 +31,7 @@ with app.app_context():
 def home():
     if 'username' in session:
         return render_template('index.html', username=session['username'])
-    else:
-        return redirect(url_for('login_page'))
+    return redirect(url_for('login_page'))
 
 @app.route('/login')
 def login_page():
@@ -63,7 +62,7 @@ def signup():
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
             flash("Username already taken. Please choose a different one.", "error")
-            return render_template('signup.html')  # Render the signup template again
+            return render_template('signup.html')
 
         new_user = User(username=username, password=generate_password_hash(password))
         db.session.add(new_user)
@@ -84,27 +83,38 @@ def profile_form(user_id):
         name = request.form['name']
         bio = request.form['bio']
         
-        # Update the profile fields
-        profile.name = name
-        profile.bio = bio
-        
+        if profile is None:
+            # Create a new profile if it does not exist
+            profile = Profile(user_id=user_id, name=name, bio=bio)
+            db.session.add(profile)
+        else:
+            # Update the profile fields
+            profile.name = name
+            profile.bio = bio
+            
         db.session.commit()  # Save the changes to the database
-        flash("Profile updated successfully!", "success")
+        flash("Profile saved successfully!", "success")
         return redirect(url_for('user_profile', user_id=user_id))
     
     return render_template('profile_form.html', user_id=user_id, profile=profile)
 
 @app.route('/user/<int:user_id>')
 def user_profile(user_id):
-    user = User.query.get(user_id)
     profile = Profile.query.filter_by(user_id=user_id).first()
-    return render_template('user_profile.html', user=user, profile=profile)
+    user = User.query.get(user_id)
+
+    if profile is None or user is None:
+        flash("Profile not found.", "error")
+        return redirect(url_for('home'))
+
+    return render_template('user_profile.html', profile=profile, user=user)
+
 
 @app.route('/search', methods=['GET', 'POST'])
 def search_users():
     if request.method == 'POST':
         search_query = request.form['search_query']
-        users = User.query.filter(User.username.ilike(f'%{search_query}%')).all()  # Use ILIKE for case-insensitive search
+        users = User.query.filter(User.username.ilike(f'%{search_query}%')).all()  # Case-insensitive search
         return render_template('search_results.html', users=users, search_query=search_query)
     
     return render_template('search.html')
@@ -117,3 +127,4 @@ def logout():
 
 if __name__ == "__main__":
     app.run(debug=True)
+

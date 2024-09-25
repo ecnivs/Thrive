@@ -55,8 +55,8 @@
         <h2>{{ user.username }}'s Profile</h2>
         
         <div class="profile-info">
-            <p><strong>Name:</strong> {{ profile.name }}</p>
-            <p><strong>Bio:</strong> {{ profile.bio }}</p>
+            <p><strong>Name:</strong> {{ profile.name if profile.name else 'Not set' }}</p>
+            <p><strong>Bio:</strong> {{ profile.bio if profile.bio else 'No bio available.' }}</p>
         </div>
 
         <div class="navigation">
@@ -67,3 +67,4 @@
     </div>
 </body>
 </html>
+

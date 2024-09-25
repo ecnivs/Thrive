@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -43,7 +43,8 @@ def login():
         session['username'] = username
         return redirect(url_for('home'))
     else:
-        return "Invalid credentials, please try again."
+        flash("Invalid credentials, please try again.", "error")
+        return render_template('login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -68,6 +69,7 @@ def signup():
         return redirect(url_for('home'))
 
     return render_template('signup.html')
+
 
 @app.route('/logout')
 def logout():

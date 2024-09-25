@@ -70,7 +70,6 @@
 <body>
 <div class="profile-container">
     <h2>{{ user.username }}'s Profile</h2>
-    
     <div class="profile-info" style="display: flex; align-items: center; margin-bottom: 20px;">
         {% if profile.profile_picture %}
             <img src="{{ url_for('static', filename='uploads/' + profile.profile_picture) }}" 
@@ -96,6 +95,5 @@
         <a href="{{ url_for('logout') }}">Logout</a>
     </div>
 </div>
-
 </body>
 </html>

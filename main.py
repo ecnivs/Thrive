@@ -23,14 +23,14 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
-    profile = db.relationship('Profile', backref='user', uselist=False)  # One-to-one relationship
+    profile = db.relationship('Profile', backref='user', uselist=False)
 
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(150), nullable=True)
     bio = db.Column(db.Text, nullable=True)
-    profile_picture = db.Column(db.String(150), nullable=True)  # To store picture filename
+    profile_picture = db.Column(db.String(150), nullable=True)
 
 # Create database tables if they do not exist
 with app.app_context():
@@ -56,7 +56,7 @@ def login():
 
     if user and check_password_hash(user.password, password):
         session['username'] = username
-        session['user_id'] = user.id  # Store user_id in session
+        session['user_id'] = user.id
         return redirect(url_for('home'))
     else:
         flash("Invalid credentials, please try again.", "error")
@@ -77,8 +77,8 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
         
-        session['username'] = username  # Store username in session
-        session['user_id'] = new_user.id  # Store user_id in session
+        session['username'] = username
+        session['user_id'] = new_user.id
         flash("Registration successful! Please fill out your profile.", "success")
         return redirect(url_for('profile_form', user_id=new_user.id))
 
@@ -86,10 +86,8 @@ def signup():
 
 @app.route('/profile/<int:user_id>', methods=['GET', 'POST'])
 def profile_form(user_id):
-    # Get the profile associated with the user_id
     profile = Profile.query.filter_by(user_id=user_id).first()
     
-    # Check if the logged-in user is trying to edit their own profile
     if 'user_id' not in session or session['user_id'] != user_id:
         flash("You are not authorized to edit this profile.", "error")
         return redirect(url_for('home'))
@@ -109,27 +107,22 @@ def profile_form(user_id):
                         old_picture_path = os.path.join(app.config['UPLOAD_FOLDER'], profile.profile_picture)
                         if os.path.exists(old_picture_path):
                             os.remove(old_picture_path)
-                    
-                    # Update profile picture
+
                     profile.profile_picture = filename
                 else:
-                    # If profile does not exist, create it
                     profile = Profile(user_id=user_id, name=name, bio=bio, profile_picture=filename)
                     db.session.add(profile)
 
-                # Save the new picture
                 file.save(file_path)
 
-        # Update name and bio
         if profile:
             profile.name = name
             profile.bio = bio
         else:
-            # Create a new profile if it does not exist
             profile = Profile(user_id=user_id, name=name, bio=bio)
             db.session.add(profile)
 
-        db.session.commit()  # Save the changes to the database
+        db.session.commit()
         flash("Profile saved successfully!", "success")
         return redirect(url_for('user_profile', user_id=user_id))
 
@@ -150,14 +143,12 @@ def user_profile(user_id):
 def search_users():
     if request.method == 'POST':
         search_query = request.form['search_query']
-        # Join the Profile model to fetch profile data along with the user
         users = User.query.join(Profile).filter(
             (User.username.ilike(f'%{search_query}%')) | 
             (Profile.name.ilike(f'%{search_query}%'))
-        ).options(joinedload(User.profile)).all()  # Make sure profile is loaded with User
-
+        ).options(joinedload(User.profile)).all()
         return render_template('search_results.html', users=users, search_query=search_query)
-    
+
     return render_template('search.html')
 
 

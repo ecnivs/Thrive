@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Form</title>
+    <title>Edit Profile</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,17 +17,26 @@
         .profile-form {
             background-color: white;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            width: 300px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            width: 350px;
             box-sizing: border-box;
         }
-        .profile-form input, .profile-form textarea {
+        .profile-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+        .profile-form input, 
+        .profile-form textarea {
             display: block;
             width: 100%;
             padding: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
             box-sizing: border-box;
+            font-size: 14px;
         }
         .profile-form button {
             padding: 10px;
@@ -37,20 +46,26 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
         }
         .profile-form button:hover {
             background-color: #0056b3;
         }
         .error-message {
             color: red;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .success-message {
+            color: green;
+            margin-bottom: 15px;
             text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="profile-form">
-        <h2>Fill Out Your Profile</h2>
+        <h2>Edit Your Profile</h2>
 
         {% with messages = get_flashed_messages(with_categories=True) %}
             {% if messages %}
@@ -65,10 +80,15 @@
         {% endwith %}
 
         <form action="{{ url_for('profile_form', user_id=user_id) }}" method="POST">
-            <input type="text" name="name" placeholder="Name" required>
-            <textarea name="bio" placeholder="Tell us about yourself..." required></textarea>
-            <button type="submit">Save Profile</button>
+            <input type="text" name="name" placeholder="Full Name" value="{{ profile.name }}" required>
+            <textarea name="bio" placeholder="Tell us about yourself..." required>{{ profile.bio }}</textarea>
+            <button type="submit">Update Profile</button>
         </form>
+
+        <div class="navigation">
+            <p><a href="{{ url_for('user_profile', user_id=user_id) }}">Back to Profile</a></p>
+        </div>
     </div>
 </body>
 </html>
+

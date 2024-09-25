@@ -77,18 +77,21 @@ def signup():
 
 @app.route('/profile/<int:user_id>', methods=['GET', 'POST'])
 def profile_form(user_id):
+    profile = Profile.query.filter_by(user_id=user_id).first()
+    
     if request.method == 'POST':
         name = request.form['name']
         bio = request.form['bio']
         
-        new_profile = Profile(user_id=user_id, name=name, bio=bio)
-        db.session.add(new_profile)
-        db.session.commit()
+        # Update the profile fields
+        profile.name = name
+        profile.bio = bio
         
-        flash("Profile saved successfully!", "success")
+        db.session.commit()  # Save the changes to the database
+        flash("Profile updated successfully!", "success")
         return redirect(url_for('user_profile', user_id=user_id))
     
-    return render_template('profile_form.html', user_id=user_id)
+    return render_template('profile_form.html', user_id=user_id, profile=profile)
 
 @app.route('/user/<int:user_id>')
 def user_profile(user_id):

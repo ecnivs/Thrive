@@ -1,3 +1,6 @@
 .python-version
 instance/
+__pycache__/
+.env
+static/uploads/
 

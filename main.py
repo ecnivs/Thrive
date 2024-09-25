@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -8,6 +10,12 @@ app.secret_key = 'your_secret_key'
 # Configure database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5 MB limit
+
+# Create the upload folder if it doesn't exist
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
 db = SQLAlchemy(app)
 
 # User model
@@ -20,10 +28,11 @@ class User(db.Model):
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    name = db.Column(db.String(150), nullable=True)  # Nullable for profile creation
-    bio = db.Column(db.Text, nullable=True)  # Nullable for profile creation
+    name = db.Column(db.String(150), nullable=True)
+    bio = db.Column(db.Text, nullable=True)
+    profile_picture = db.Column(db.String(150), nullable=True)  # To store picture filename
 
-# Create database tables
+# Create database tables if they do not exist
 with app.app_context():
     db.create_all()
 
@@ -82,6 +91,18 @@ def profile_form(user_id):
     if request.method == 'POST':
         name = request.form['name']
         bio = request.form['bio']
+
+        # Check for file upload
+        if 'picture' in request.files:
+            file = request.files['picture']
+            if file.filename:
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(file_path)
+
+                # Save the filename in the profile
+                if profile:
+                    profile.profile_picture = filename
         
         if profile is None:
             # Create a new profile if it does not exist
@@ -126,3 +147,4 @@ def logout():
 
 if __name__ == "__main__":
     app.run(debug=True)
+

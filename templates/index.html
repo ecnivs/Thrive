@@ -24,15 +24,16 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        .search-bar input[type="submit"] {
-            pad  # Store username in sessionding: 10px 20px;
+        .search-bar button {
+            padding: 10px 20px; /* Increased padding */
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px; /* Adjust font size */
         }
-        .search-bar input[type="submit"]:hover {
+        .search-bar button:hover {
             background-color: #0056b3;
         }
         .button-group {
@@ -46,7 +47,7 @@
         }
         .button-group a.profile-button {
             background-color: #28a745;
-            margin-right: 10px; /* Add margin-right to the Profile button */
+            margin-right: 10px; 
         }
         .button-group a.logout-button {
             background-color: #dc3545;
@@ -60,7 +61,7 @@
     <div class="search-bar">
         <form action="{{ url_for('search_users') }}" method="POST">
             <input type="text" name="search_query" placeholder="Search for users...">
-            <input type="submit" value="Search">
+            <button type="submit">🔍</button>
         </form>
     </div>
     <div class="button-group">
@@ -69,3 +70,4 @@
     </div>
 </body>
 </html>
+

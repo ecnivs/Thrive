@@ -36,9 +36,11 @@ class Profile(db.Model):
 with app.app_context():
     db.create_all()
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
     if 'username' in session:
+        if request.method == 'POST':
+            return search_users()
         return render_template('index.html', username=session['username'])
     return redirect(url_for('login_page'))
 
@@ -139,17 +141,20 @@ def user_profile(user_id):
 
     return render_template('user_profile.html', profile=profile, user=user)
 
-@app.route('/search', methods=['GET', 'POST'])
+@app.route('/search', methods=['POST'])
 def search_users():
-    if request.method == 'POST':
-        search_query = request.form['search_query']
-        users = User.query.join(Profile).filter(
-            (User.username.ilike(f'%{search_query}%')) | 
-            (Profile.name.ilike(f'%{search_query}%'))
-        ).options(joinedload(User.profile)).all()
-        return render_template('search_results.html', users=users, search_query=search_query)
+    search_query = request.form['search_query'].strip()
 
-    return render_template('search.html')
+    if not search_query:  # Check if the search query is empty
+        flash("Please enter a valid search query.", "error")
+        return redirect(url_for('home'))  # Redirect back to home if empty
+    
+    users = User.query.join(Profile).filter(
+        (User.username.ilike(f'%{search_query}%')) | 
+        (Profile.name.ilike(f'%{search_query}%'))
+    ).options(joinedload(User.profile)).all()
+    
+    return render_template('search_results.html', users=users, search_query=search_query)
 
 
 @app.route('/logout')

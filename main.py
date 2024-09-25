@@ -145,10 +145,15 @@ def user_profile(user_id):
 def search_users():
     if request.method == 'POST':
         search_query = request.form['search_query']
-        users = User.query.filter(User.username.ilike(f'%{search_query}%')).all()  # Case-insensitive search
+        users = User.query.join(Profile).filter(
+            (User.username.ilike(f'%{search_query}%')) | 
+            (Profile.name.ilike(f'%{search_query}%'))
+        ).all()
+
         return render_template('search_results.html', users=users, search_query=search_query)
     
     return render_template('search.html')
+
 
 @app.route('/logout')
 def logout():

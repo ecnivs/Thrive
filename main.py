@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+from sqlalchemy.orm import joinedload
 import os
 
 app = Flask(__name__)
@@ -18,13 +19,12 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 db = SQLAlchemy(app)
 
-# User model
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
+    profile = db.relationship('Profile', backref='user', uselist=False)  # One-to-one relationship
 
-# Profile model
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -145,10 +145,11 @@ def user_profile(user_id):
 def search_users():
     if request.method == 'POST':
         search_query = request.form['search_query']
+        # Join the Profile model to fetch profile data along with the user
         users = User.query.join(Profile).filter(
             (User.username.ilike(f'%{search_query}%')) | 
             (Profile.name.ilike(f'%{search_query}%'))
-        ).all()
+        ).options(joinedload(User.profile)).all()  # Make sure profile is loaded with User
 
         return render_template('search_results.html', users=users, search_query=search_query)
     

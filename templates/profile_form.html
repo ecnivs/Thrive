@@ -82,12 +82,11 @@
         <form action="{{ url_for('profile_form', user_id=user_id) }}" method="POST" enctype="multipart/form-data">
             <input type="text" name="name" placeholder="Name" value="{{ profile.name }}" required>
             <textarea name="bio" placeholder="Tell us about yourself..." required>{{ profile.bio }}</textarea>
-    
             <label for="picture">Upload Profile Picture:</label>
             <input type="file" name="picture" id="picture" accept="image/*">
-    
             <button type="submit">Update Profile</button>
         </form>
+
 
 
         <div class="navigation">

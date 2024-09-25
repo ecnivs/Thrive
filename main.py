@@ -92,7 +92,7 @@ def profile_form(user_id):
         name = request.form['name']
         bio = request.form['bio']
 
-        # Check for file upload
+        # Handle the picture upload
         if 'picture' in request.files:
             file = request.files['picture']
             if file.filename:
@@ -100,23 +100,27 @@ def profile_form(user_id):
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(file_path)
 
-                # Save the filename in the profile
+                # If profile exists, update the profile picture
                 if profile:
                     profile.profile_picture = filename
-        
-        if profile is None:
+                else:
+                    # If profile does not exist, create it
+                    profile = Profile(user_id=user_id, name=name, bio=bio, profile_picture=filename)
+                    db.session.add(profile)
+
+        # If the profile exists, just update the name and bio
+        if profile:
+            profile.name = name
+            profile.bio = bio
+        else:
             # Create a new profile if it does not exist
             profile = Profile(user_id=user_id, name=name, bio=bio)
             db.session.add(profile)
-        else:
-            # Update the profile fields
-            profile.name = name
-            profile.bio = bio
-            
+
         db.session.commit()  # Save the changes to the database
         flash("Profile saved successfully!", "success")
         return redirect(url_for('user_profile', user_id=user_id))
-    
+
     return render_template('profile_form.html', user_id=user_id, profile=profile)
 
 @app.route('/user/<int:user_id>')

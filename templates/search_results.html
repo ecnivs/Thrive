@@ -1,54 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'base.html' %}
+
+{% block head %}
     <title>Search Results</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 20px;
-        }
-        .results-container {
-            background-color: white;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-        .results-container h2 {
-            margin-bottom: 20px;
-        }
-        .user {
-            margin: 10px 0;
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-        }
-        .user:last-child {
-            border-bottom: none;
-        }
-        .user a {
-            text-decoration: none;
-            color: #007bff;
-        }
-        .user a:hover {
-            text-decoration: underline;
-        }
-        .navigation {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .navigation a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .navigation a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search_results.css') }}">
+{% endblock %}
+
+{% block body %}
 <div class="results-container">
     <h2>Search Results for "{{ search_query }}"</h2>
     {% for user in users %}
@@ -76,6 +33,4 @@
         <a href="{{ url_for('home') }}">Back to Home</a>
     </div>
 </div>
-</body>
-</html>
-
+{% endblock %}

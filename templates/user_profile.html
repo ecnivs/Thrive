@@ -1,73 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'base.html' %}
+
+{% block head %}
     <title>User Profile</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f5f5f5;
-            margin: 0;
-        }
-        .profile-container {
-            background-color: white;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            width: 400px;
-            box-sizing: border-box;
-        }
-        .profile-container h2 {
-            margin-bottom: 20px;
-            text-align: center;
-            color: #333;
-        }
-        .profile-info {
-            margin-bottom: 20px;
-        }
-        .profile-info p {
-            margin: 8px 0;
-            color: #555;
-        }
-        .profile-info strong {
-            color: #007bff;
-        }
-        .navigation {
-            text-align: center;
-        }
-        .navigation a {
-            color: #007bff;
-            text-decoration: none;
-            margin-right: 15px;
-        }
-        .navigation a:hover {
-            text-decoration: underline;
-        }
-        .profile-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 15px;
-        }
-        .profile-container {
-            margin: 20px;
-        }
-        .navigation {
-            margin-top: 20px;
-        }
-        .profile-info {
-            display: flex;
-            align-items: center;
-        }
-    </style>
-</head>
-<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user_profile.css') }}">
+{% endblock %}
+
+{% block body %}
 <div class="profile-container">
     <h2>{{ user.username }}'s Profile</h2>
     <div class="profile-info" style="display: flex; align-items: center; margin-bottom: 20px;">
@@ -95,6 +33,4 @@
         <a href="{{ url_for('logout') }}">Logout</a>
     </div>
 </div>
-
-</body>
-</html>
+{% endblock %}

@@ -1,60 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'base.html' %}
+
+{% block head %}
     <title>Homepage</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            text-align: center;
-            padding: 50px;
-        }
-        .welcome {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .search-bar {
-            margin-bottom: 20px;
-        }
-        .search-bar input[type="text"] {
-            padding: 10px;
-            width: 250px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .search-bar button {
-            padding: 10px 20px; /* Increased padding */
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px; /* Adjust font size */
-        }
-        .search-bar button:hover {
-            background-color: #0056b3;
-        }
-        .button-group {
-            margin-top: 20px;
-        }
-        .button-group a {
-            padding: 10px 20px;
-            text-decoration: none;
-            color: white;
-            border-radius: 4px;
-        }
-        .button-group a.profile-button {
-            background-color: #28a745;
-            margin-right: 10px; 
-        }
-        .button-group a.logout-button {
-            background-color: #dc3545;
-        }
-    </style>
-</head>
-<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
     <div class="welcome">
         <h1>Welcome, {{ username }}!</h1>
     </div>
@@ -68,6 +19,5 @@
         <a href="{{ url_for('user_profile', user_id=session['user_id']) }}" class="profile-button">Profile</a>
         <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
     </div>
-</body>
-</html>
+{% endblock %}
 

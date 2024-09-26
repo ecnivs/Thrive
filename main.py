@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from sqlalchemy.orm import joinedload
+from models import *
 import os
 
 app = Flask(__name__)
@@ -17,20 +18,7 @@ app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 # Create the upload folder if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-db = SQLAlchemy(app)
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(150), nullable=False)
-    profile = db.relationship('Profile', backref='user', uselist=False)
-
-class Profile(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    name = db.Column(db.String(150), nullable=True)
-    bio = db.Column(db.Text, nullable=True)
-    profile_picture = db.Column(db.String(150), nullable=True)
+db.init_app(app)
 
 # Create database tables if they do not exist
 with app.app_context():

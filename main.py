@@ -12,7 +12,7 @@ app.secret_key = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
-app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5 MB limit
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 
 # Create the upload folder if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -81,7 +81,7 @@ def signup():
         
         session['username'] = username
         session['user_id'] = new_user.id
-        flash("Registration successful! Please fill out your profile.", "success")
+        flash("Account created successfully! Please fill out your profile.", "success")
         return redirect(url_for('profile_form', user_id=new_user.id))
 
     return render_template('signup.html')
@@ -125,7 +125,6 @@ def profile_form(user_id):
             db.session.add(profile)
 
         db.session.commit()
-        flash("Profile saved successfully!", "success")
         return redirect(url_for('user_profile', user_id=user_id))
 
     return render_template('profile_form.html', user_id=user_id, profile=profile)
@@ -136,7 +135,6 @@ def user_profile(user_id):
     user = User.query.get(user_id)
 
     if profile is None or user is None:
-        flash("Profile not found.", "error")
         return redirect(url_for('home'))
 
     return render_template('user_profile.html', profile=profile, user=user)
@@ -145,17 +143,17 @@ def user_profile(user_id):
 def search_users():
     search_query = request.form['search_query'].strip()
 
-    if not search_query:  # Check if the search query is empty
-        flash("Please enter a valid search query.", "error")
-        return redirect(url_for('home'))  # Redirect back to home if empty
-    
+    if not search_query:
+        return redirect(url_for('home'))
+
+    current_user_id = session.get('user_id')
+
     users = User.query.join(Profile).filter(
         (User.username.ilike(f'%{search_query}%')) | 
         (Profile.name.ilike(f'%{search_query}%'))
-    ).options(joinedload(User.profile)).all()
-    
-    return render_template('search_results.html', users=users, search_query=search_query)
+    ).filter(User.id != current_user_id).options(joinedload(User.profile)).all()
 
+    return render_template('search_results.html', users=users, search_query=search_query)
 
 @app.route('/logout')
 def logout():

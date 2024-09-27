@@ -20,9 +20,11 @@ with app.app_context():
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if 'username' in session:
+        user = User.query.get(session['user_id'])
+        profile = Profile.query.filter_by(user_id=session['user_id']).first()
         if request.method == 'POST':
             return search_users()
-        return render_template('index.html', username=session['username'])
+        return render_template('index.html', username=session['username'], user=user, profile=profile)
     return redirect(url_for('login_page'))
 
 @app.route('/login')

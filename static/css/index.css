@@ -8,11 +8,12 @@ body {
     flex: 1;
     display: flex;
     align-items: center;
+    font-family: monospace;
 }
 .logo h2 {
     font-size: 30px;
     font-weight: bold;
-    color: #333;
+    color: white;
     margin: 0;
     padding-left: 25px;
 }
@@ -43,9 +44,19 @@ body {
 .button-group a.logout-button {
     background-color: #dc3545;
 }
+.navbar{
+    background-color: #76639c;
+    color: white;
+    padding: 10px;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+}
 .nav-container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 .profile {
     margin-left: auto;

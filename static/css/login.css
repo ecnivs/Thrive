@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: monospace;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,7 +10,7 @@ body {
 .login-box {
     background-color: white;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shado    font-family: monospace;w: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     width: 300px;
     box-sizing: border-box;

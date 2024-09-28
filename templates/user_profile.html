@@ -26,11 +26,9 @@
     </div>
 
     <div class="navigation">
-        <a href="{{ url_for('home') }}">Home</a>
         {% if session['user_id'] == user.id %}
             <a href="{{ url_for('profile_form', user_id=profile.user_id) }}">Edit Profile</a>
         {% endif %}
-        <a href="{{ url_for('logout') }}">Logout</a>
     </div>
 </div>
 {% endblock %}

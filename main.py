@@ -19,8 +19,15 @@ with app.app_context():
 
 @app.context_processor
 def inject():
-    return dict(user= User.query.get(session['user_id']),
-                profile = Profile.query.filter_by(user_id=session['user_id']).first())
+    current_template = request.endpoint
+    excluded_routes = ['login', 'signup', 'profile_form']
+    if current_template not in excluded_routes:
+        return {
+            'user': User.query.get(session.get('user_id')),
+            'profile': Profile.query.filter_by(user_id=session.get('user_id')).first()
+        }
+    return {}
+
 
 @app.route('/', methods=['GET', 'POST'])
 def home():

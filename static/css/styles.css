@@ -10,7 +10,6 @@ a {
 .logo {
     flex: 1;
     display: flex;
-    font-style: italic;
     align-items: center;
     color: transparent;
     -webkit-text-stroke: 1px #000000;
@@ -19,6 +18,7 @@ a {
 }
 .logo h2 {
     font-size: 30px;
+    font-family: monospace;
     font-weight: bold;
     color: white;
     margin: 0;

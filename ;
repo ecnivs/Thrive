@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar"><div class="nav-container">
         <a href="{{ url_for('home') }}">
-        <div align="left" class="logo"><h2>t#rive</h2></div>
+        <div align="left" class="logo"><h2>FIRREEEEEEEEEEEEEEEEEEEEEEEEEEEE</h2></div>
         </a>
         <div align=center class="search-bar">
             <form action="{{ url_for('search_users') }}" method="POST">

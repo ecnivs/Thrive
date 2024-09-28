@@ -17,6 +17,11 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+@app.context_processor
+def inject():
+    return dict(user= User.query.get(session['user_id']),
+                profile = Profile.query.filter_by(user_id=session['user_id']).first())
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if 'username' in session:
@@ -122,15 +127,19 @@ def user_profile(user_id):
 
     return render_template('user_profile.html', profile=profile, user=user)
 
+from flask import redirect, url_for, request, session
+
 @app.route('/search', methods=['POST'])
 def search_users():
     search_query = request.form['search_query'].strip()
-
     if not search_query:
         return redirect(url_for('home'))
+    return redirect(url_for('search_results', query=search_query))
 
+@app.route('/search_results')
+def search_results():
+    search_query = request.args.get('query')
     current_user_id = session.get('user_id')
-
     users = User.query.join(Profile).filter(
         (User.username.ilike(f'%{search_query}%')) | 
         (Profile.name.ilike(f'%{search_query}%'))

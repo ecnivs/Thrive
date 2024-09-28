@@ -4,6 +4,9 @@ body {
     text-align: center;
     padding: 10px;
 }
+a {
+    text-decoration: none;
+}
 .logo {
     flex: 1;
     display: flex;
@@ -20,6 +23,10 @@ body {
     color: white;
     margin: 0;
     padding-left: 25px;
+}
+.logo a {
+    text-decoration: none;
+    color: inherit;
 }
 .search-bar {
     flex: auto;
@@ -49,6 +56,24 @@ body {
 .button-group a.logout-button {
     background-color: #dc3545;
 }
+.profile {
+    margin-left: auto;
+}
+.profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    padding: 35px;
+    user-select: none;
+    border: none;
+    object-fit: cover;
+}
+.logout-button {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+}
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -71,21 +96,18 @@ body {
     justify-content: space-between;
     width: 100%;
 }
-.profile {
-    margin-left: auto;
+.search-bar {
+    flex: auto;
+    display: flex;
+    position: center;
+    justify-content: center;
+    padding-top: 20px;
 }
-.profile-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-    padding: 20px;
-    user-select: none;
-    border: none;
-    object-fit: cover;
-}
-.logout-button {
-    position: absolute;
-    bottom: 10px;
-    right: 20px;
+.search-bar input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 30px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 16px;
 }

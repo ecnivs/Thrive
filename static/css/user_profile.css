@@ -42,11 +42,10 @@ body {
     text-decoration: underline;
 }
 .profile-img {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     margin-right: 10px;
-    padding: 20px;
     user-select: none;
     border: none;
     object-fit: cover;

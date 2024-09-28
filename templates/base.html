@@ -3,9 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     {% block head %}{% endblock %}
 </head>
 <body>
+    <nav class="navbar"><div class="nav-container">
+        <a href="{{ url_for('home') }}">
+        <div align="left" class="logo"><h2>Thrive</h2></div>
+        </a>
+        <div align=center class="search-bar">
+            <form action="{{ url_for('search_users') }}" method="POST">
+                <input type="text" name="search_query" placeholder="Search">
+            </form>
+        </div>
+        <div class="profile">
+            <a href="{{ url_for('user_profile', user_id=user.id) }}">
+                {% if profile.profile_picture %}
+                    <img src="{{ url_for('static', filename='uploads/' + profile.profile_picture) }}"
+                         alt="Profile Picture"
+                         class="profile-img"
+                         align=right
+                         style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
+                {% else %}
+                    <img src="{{ url_for('static', filename='default_profile_picture.png') }}" 
+                         alt="Profile Picture" 
+                         class="profile-img"
+                         align=right
+                         style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
+                {% endif %}
+            </a>
+        </div></div>
+    </nav>
     {% block body %}{% endblock %}
 </body>
 </html>

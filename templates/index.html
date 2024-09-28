@@ -2,35 +2,9 @@
 
 {% block head %}
     <title>HomePage</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
 
 {% block body %}
-    <nav class="navbar"><div class="nav-container">
-        <div align=left class="logo"><h2>Thrive</h2></div>
-        <div align=center class="search-bar">
-            <form action="{{ url_for('search_users') }}" method="POST">
-                <input type="text" name="search_query" placeholder="Search">
-            </form>
-        </div>
-        <div class="profile">
-            <a href="{{ url_for('user_profile', user_id=user.id) }}">
-                {% if profile.profile_picture %}
-                    <img src="{{ url_for('static', filename='uploads/' + profile.profile_picture) }}"
-                         alt="Profile Picture"
-                         class="profile-img"
-                         align=right
-                         style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
-                {% else %}
-                    <img src="{{ url_for('static', filename='default_profile_picture.png') }}" 
-                         alt="Profile Picture" 
-                         class="profile-img"
-                         align=right
-                         style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
-                {% endif %}
-            </a>
-        </div></div>
-        </nav>
     <br><br><br>
     <div class="button-group">
         <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>

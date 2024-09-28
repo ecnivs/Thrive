@@ -28,7 +28,6 @@ def inject():
         }
     return {}
 
-
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if 'username' in session:

@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy.orm import joinedload
 from models import *
 import os
+import re
 
 # initialize
 app = Flask(__name__)
@@ -19,13 +20,10 @@ with app.app_context():
 
 @app.context_processor
 def inject():
-    current_template = request.endpoint
-    excluded_routes = ['login', 'signup', 'profile_form']
-    if current_template not in excluded_routes:
+    if 'username' in session:
         return {
-            'user': User.query.get(session.get('user_id')),
-            'profile': Profile.query.filter_by(user_id=session.get('user_id')).first()
-        }
+            'current_user' : User.query.get(session['user_id']),
+            'current_profile': Profile.query.filter_by(user_id=session['user_id']).first()}
     return {}
 
 @app.route('/', methods=['GET', 'POST'])
@@ -61,8 +59,12 @@ def login():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form['username'].lower()
+        username = request.form['username'].lower().strip()
         password = request.form['password']
+
+        if not re.match("^[a-z0-9_-]+$", username):
+            flash("Username cannot contain special characters.", "error")
+            return render_template('signup.html')
 
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:

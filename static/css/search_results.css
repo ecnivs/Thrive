@@ -20,6 +20,7 @@ body {
 }
 .user:last-child {
     border-bottom: none;
+    color: #4e4c94;
 }
 .user a {
     text-decoration: none;
@@ -33,7 +34,7 @@ body {
     margin-top: 20px;
 }
 .navigation a {
-    color: #007bff;
+    color: #4e4c94;
     text-decoration: none;
 }
 .navigation a:hover {

@@ -25,21 +25,21 @@ body {
 .login-box button {
     padding: 10px;
     width: 100%;
-    background-color: #007bff;
+    background-color: #7573b8;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 .login-box button:hover {
-    background-color: #0056b3;
+    background-color: #7a78ba;
 }
 .signup-link {
     text-align: center;
     margin-top: 15px;
 }
 .signup-link a {
-    color: #007bff;
+    color: #4e4c94;
     text-decoration: none;
 }
 .signup-link a:hover {

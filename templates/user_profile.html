@@ -37,11 +37,11 @@
         {% if session['user_id'] != user.id %}
             {% if is_following %}
                 <form action="{{ url_for('unfollow', user_id=user.id) }}" method="POST">
-                    <button type="submit">Unfollow</button>
+                    <button type="submit" class="unfollow">Unfollow</button>
                 </form>
             {% else %}
                 <form action="{{ url_for('follow', user_id=user.id) }}" method="POST">
-                    <button type="submit">Follow</button>
+                    <button type="submit" class="follow">Follow</button>
                 </form>
             {% endif %}
         {% endif %}

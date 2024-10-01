@@ -40,14 +40,14 @@ class User(db.Model):
             db.session.commit()
 
     def is_following(self, user):
-        """Check if the current user is following the given user."""
+        # Check if the current user is following the given user.
         return Follow.query.filter_by(
             follower_id=self.id,
             followed_id=user.id
         ).first() is not None
 
     def is_followed_by(self, user):
-        """Check if the current user is followed by the given user."""
+        # Check if the current user is followed by the given user.
         return Follow.query.filter_by(
             follower_id=user.id,
             followed_id=self.id

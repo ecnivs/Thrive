@@ -133,9 +133,53 @@ def user_profile(user_id):
     if profile is None or user is None:
         return redirect(url_for('home'))
 
-    return render_template('user_profile.html', profile=profile, user=user)
+    followers = User.query.join(Follow, User.id == Follow.follower_id).filter(Follow.followed_id == user_id).all()
+    following = User.query.join(Follow, User.id == Follow.followed_id).filter(Follow.follower_id == user_id).all()
 
-from flask import redirect, url_for, request, session
+    followers_count = len(followers)
+    following_count = len(following)
+
+    is_following = False
+    if 'user_id' in session:
+        current_user = User.query.get(session['user_id'])
+        is_following = current_user.is_following(user)
+
+    return render_template('user_profile.html', 
+                           profile=profile, 
+                           user=user, 
+                           followers=followers, 
+                           following=following, 
+                           followers_count=followers_count, 
+                           following_count=following_count, 
+                           is_following=is_following)
+
+@app.route('/follow/<int:user_id>', methods=['POST'])
+def follow(user_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user_to_follow = User.query.get_or_404(user_id)
+    current_user = User.query.get(session['user_id'])
+
+    if not current_user.is_following(user_to_follow):
+        current_user.follow(user_to_follow)
+        db.session.commit()
+
+    return redirect(url_for('user_profile', user_id=user_id))
+
+@app.route('/unfollow/<int:user_id>', methods=['POST'])
+def unfollow(user_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user_to_unfollow = User.query.get_or_404(user_id)
+    current_user = User.query.get(session['user_id'])
+
+    if current_user.is_following(user_to_unfollow):
+        current_user.unfollow(user_to_unfollow)
+        db.session.commit()
+
+    return redirect(url_for('user_profile', user_id=user_id))
 
 @app.route('/search', methods=['POST'])
 def search_users():

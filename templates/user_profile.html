@@ -7,8 +7,8 @@
 
 {% block body %}
 <div class="profile-container">
-    <h2 style="color: #4f4d97;">{{ user.username }}'s Profile</h2>
-    <div class="profile-info" style="display: flex; align-items: center; margin-bottom: 20px;">
+    <h2>{{ user.username }}'s Profile</h2>
+    <div class="profile-info">
         {% if profile.profile_picture %}
             <img src="{{ url_for('static', filename='uploads/' + profile.profile_picture) }}" 
                  alt="Profile Picture" 
@@ -19,10 +19,32 @@
                  class="profile-img">
         {% endif %}
 
-        <div style="margin-left: 5px;">
+        <div>
             <p><strong>Name:</strong> {{ profile.name if profile.name else 'Not set' }}</p>
             <p><strong>Bio:</strong> {{ profile.bio if profile.bio else 'No bio available.' }}</p>
         </div>
+    </div>
+
+    <div class="followers-following">
+        <p>
+            <a href="javascript:void(0);" onclick="openFollowersModal()">
+                <strong>Followers:</strong></a> {{ followers_count }} | <a href="javascript:void(0);" onclick="openFollowingModal()">
+                <strong>Following:</strong></a> {{ following_count }}
+        </p>
+    </div>
+
+    <div class="follow-unfollow">
+        {% if session['user_id'] != user.id %}
+            {% if is_following %}
+                <form action="{{ url_for('unfollow', user_id=user.id) }}" method="POST">
+                    <button type="submit">Unfollow</button>
+                </form>
+            {% else %}
+                <form action="{{ url_for('follow', user_id=user.id) }}" method="POST">
+                    <button type="submit">Follow</button>
+                </form>
+            {% endif %}
+        {% endif %}
     </div>
 
     <div class="navigation">
@@ -31,4 +53,56 @@
         {% endif %}
     </div>
 </div>
+
+<!-- Followers Modal -->
+<div id="followersModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3>Followers</h3>
+        <ul>
+            {% for follower in followers %}
+                <li><a href="{{ url_for('user_profile', user_id=follower.id) }}">{{ follower.username }}</a></li>
+            {% else %}
+                <li>No followers yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- Following Modal -->
+<div id="followingModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3>Following</h3>
+        <ul>
+            {% for follow in following %}
+                <li><a href="{{ url_for('user_profile', user_id=follow.id) }}">{{ follow.username }}</a></li>
+            {% else %}
+                <li>Not following anyone yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script>
+function openFollowersModal() {
+    document.getElementById("followersModal").style.display = "block";
+}
+
+function openFollowingModal() {
+    document.getElementById("followingModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("followersModal").style.display = "none";
+    document.getElementById("followingModal").style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        closeModal();
+    }
+}
+</script>
+
 {% endblock %}

@@ -14,6 +14,7 @@ body {
     border-radius: 10px;
     width: 400px;
     box-sizing: border-box;
+    user-select: none;
 }
 .profile-container h2 {
     margin-bottom: 20px;
@@ -108,7 +109,6 @@ body {
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
 }
-
 .modal-content {
     background-color: white;
     margin: 15% auto;
@@ -117,14 +117,12 @@ body {
     width: 50%;
     border-radius: 10px;
 }
-
 .close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
-
 .close:hover,
 .close:focus {
     color: black;

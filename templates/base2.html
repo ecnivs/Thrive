@@ -7,6 +7,13 @@
     {% block head %}{% endblock %}
 </head>
 <body>
+    <!-- Disable right click -->
+    <script>
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+    </script>
+
     <nav class="navbar"><div class="nav-container">
         <div align="left" class="logo"><h2>t#rive</h2></div>
     </div>

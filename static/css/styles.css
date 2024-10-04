@@ -82,7 +82,7 @@ a {
     padding: 10px;
     margin: 0;
     width: 100vw;
-    height: 60px;
+    height: 40px;
     position: fixed;
     top: 0;
     left: 0;
@@ -99,12 +99,10 @@ a {
 .search-bar {
     flex: auto;
     display: flex;
-    position: center;
-    justify-content: center;
-    padding-top: 20px;
+    padding-top: 5px;
 }
 .search-bar input {
-    width: 100%;
+    width: 80%;
     max-width: 400px;
     padding: 10px 30px;
     border: 1px solid #ddd;

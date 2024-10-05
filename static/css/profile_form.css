@@ -1,10 +1,8 @@
 body {
-    font-family: monospace;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #CFCFE6;
     margin: 0;
 }
 .profile-form {

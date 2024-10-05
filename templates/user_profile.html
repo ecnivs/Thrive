@@ -20,8 +20,8 @@
         {% endif %}
 
         <div>
-            <p><strong>Name:</strong> {{ profile.name if profile.name else 'Not set' }}</p>
-            <p><strong>Bio:</strong> {{ profile.bio if profile.bio else 'No bio available.' }}</p>
+            <p><strong>{{ profile.name if profile.name else 'Not set' }}</strong></p>
+            <p>{{ profile.bio if profile.bio else 'No bio available.' }}</p>
         </div>
     </div>
 

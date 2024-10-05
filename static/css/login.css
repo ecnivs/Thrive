@@ -13,6 +13,7 @@ body {
     border-radius: 8px;
     width: 300px;
     box-sizing: border-box;
+    user-select: none;
 }
 .login-box input {
     display: block;
@@ -27,6 +28,10 @@ body {
 .login-box input::placeholder {
     color: #B0B0B0;
     opacity: 0.7;
+}
+.login-box input:focus {
+    border: 1px solid #424242;
+    outline: none;
 }
 .login-box button {
     padding: 10px;
@@ -47,9 +52,6 @@ body {
 .signup-link a {
     color: #7a78ba;
     text-decoration: none;
-}
-.signup-link a:hover {
-    text-decoration: underline;
 }
 .error-message {
     color: red;

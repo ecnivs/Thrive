@@ -4,9 +4,11 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+    background-color: #121212;
+    font-family: monospace;
 }
 .profile-form {
-    background-color: white;
+    background-color: #1E1E1E;
     padding: 20px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
@@ -16,18 +18,25 @@ body {
 .profile-form h2 {
     margin-bottom: 20px;
     text-align: center;
-    color: #333;
+    color: white;
 }
 .profile-form input, 
 .profile-form textarea {
     display: block;
     width: 100%;
     padding: 10px;
+    color: white;
+    background-color: #424242;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
+    border: 1px solid #424242;
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 14px;
+}
+.profile-form input::placeholder, 
+.profile-form textarea::placeholder {
+    color: #B0B0B0;
+    opacity: 0.7;
 }
 .profile-form button {
     padding: 10px;
@@ -48,7 +57,24 @@ body {
     text-align: center;
 }
 .success-message {
-    color: green;
+    color: white;
     margin-bottom: 15px;
     text-align: center;
 }
+.navigation {
+    text-align: center;
+}
+.navigation a {
+    color: #7a78ba;
+    text-decoration: none;
+}
+input[type="file"] {
+    background-color: #424242;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #424242;
+    cursor: pointer;
+    font-family: inherit;
+}
+

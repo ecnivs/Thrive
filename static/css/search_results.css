@@ -3,7 +3,8 @@ body {
     padding: 20px;
 }
 .results-container {
-    background-color: white;
+    background-color: #1E1E1E;
+    color: white;
     padding: 20px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
@@ -18,23 +19,16 @@ body {
 }
 .user:last-child {
     border-bottom: none;
-    color: #4e4c94;
-}
-.user a {
-    text-decoration: none;
-    color: #4f4d97;
-}
-.user a:hover {
-    text-decoration: underline;
+    color: white;
 }
 .navigation {
     text-align: center;
     margin-top: 20px;
 }
 .navigation a {
-    color: #4e4c94;
+    color: #7a78ba;
     text-decoration: none;
 }
 .navigation a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }

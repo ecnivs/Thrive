@@ -6,7 +6,8 @@ body {
     margin: 0;
 }
 .login-box {
-    background-color: white;
+    background-color: #1E1E1E;
+    color: white;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -19,6 +20,13 @@ body {
     padding: 10px;
     margin-bottom: 10px;
     box-sizing: border-box;
+    background-color: #424242;
+    border: 1px solid #424242;
+    color: white;
+}
+.login-box input::placeholder {
+    color: #B0B0B0;
+    opacity: 0.7;
 }
 .login-box button {
     padding: 10px;
@@ -37,7 +45,7 @@ body {
     margin-top: 15px;
 }
 .signup-link a {
-    color: #4e4c94;
+    color: #7a78ba;
     text-decoration: none;
 }
 .signup-link a:hover {

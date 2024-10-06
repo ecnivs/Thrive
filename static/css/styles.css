@@ -9,14 +9,11 @@ a {
     flex: 1;
     display: flex;
     align-items: center;
-    color: transparent;
-    -webkit-text-stroke: 1px #000000;
-    text-stroke: 1px #000000;
+    -webkit-text-stroke: 2px #424242;
     user-select: none;
 }
 .logo h2 {
     font-size: 30px;
-    font-family: monospace;
     font-weight: bold;
     color: white;
     margin: 0;
@@ -24,7 +21,6 @@ a {
 }
 .logo a {
     text-decoration: none;
-    color: inherit;
 }
 .search-bar {
     flex: auto;

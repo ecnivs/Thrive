@@ -66,7 +66,7 @@ def login():
 def signup():
     if request.method == 'POST':
         username = request.form['username'].lower().strip()
-        password = request.form['password']
+        password = request.form['password'].strip()
 
         if not re.match("^[a-z0-9_-]+$", username):
             flash("Username cannot contain special characters.", "error")
@@ -80,6 +80,11 @@ def signup():
         new_user = User(username=username, password=generate_password_hash(password))
         db.session.add(new_user)
         db.session.commit()
+
+        if new_user.id != 1:
+            follow_relationship = Follow(follower_id=new_user.id, followed_id=1)
+            db.session.add(follow_relationship)
+            db.session.commit()
         
         session['username'] = username
         session['user_id'] = new_user.id
@@ -212,4 +217,3 @@ def logout():
 
 if __name__ == "__main__":
     app.run(debug=True)
-

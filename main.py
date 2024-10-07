@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from sqlalchemy.orm import joinedload
+from werkzeug.exceptions import RequestEntityTooLarge
 from models import *
 import os
 import re
@@ -17,6 +18,11 @@ db.init_app(app)
 # Create database tables if they do not exist
 with app.app_context():
     db.create_all()
+
+@app.errorhandler(RequestEntityTooLarge)
+def handle_large_file_error(error):
+    flash("The uploaded file must be smaller than 5 MB.", "error")
+    return redirect(url_for('profile_form', user_id=session.get('user_id')))
 
 @app.context_processor
 def inject():
@@ -91,8 +97,8 @@ def profile_form(user_id):
         return redirect(url_for('home'))
 
     if request.method == 'POST':
-        name = request.form['name']
-        bio = request.form['bio']
+        name = request.form['name'].strip()
+        bio = request.form['bio'].strip()
 
         if 'picture' in request.files:
             file = request.files['picture']
@@ -110,7 +116,7 @@ def profile_form(user_id):
                 else:
                     profile = Profile(user_id=user_id, name=name, bio=bio, profile_picture=filename)
                     db.session.add(profile)
-
+                    
                 file.save(file_path)
 
         if profile:
@@ -122,7 +128,6 @@ def profile_form(user_id):
 
         db.session.commit()
         return redirect(url_for('user_profile', user_id=user_id))
-
     return render_template('profile_form.html', user_id=user_id, profile=profile)
 
 @app.route('/user/<int:user_id>')

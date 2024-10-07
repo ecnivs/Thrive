@@ -76,7 +76,7 @@
         <h3>Following</h3>
         <ul>
             {% for follow in following %}
-                <li><a href="{{ url_for('user_profile', user_id=follow.id) }}">{{ follow.username }}</a></li>
+                <li><a style="color: white;" href="{{ url_for('user_profile', user_id=follow.id) }}">{{ follow.username }}</a></li>
             {% else %}
                 <li>Not following anyone yet.</li>
             {% endfor %}

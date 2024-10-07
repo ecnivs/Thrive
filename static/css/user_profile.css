@@ -105,15 +105,16 @@ body {
     background-color: rgba(0, 0, 0, 0.4);
 }
 .modal-content {
-    background-color: white;
+    background-color: #1E1E1E;
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 50%;
+    color: white;
     border-radius: 10px;
 }
 .close {
-    color: #aaa;
+    color: white;
     float: right;
     font-size: 28px;
     font-weight: bold;

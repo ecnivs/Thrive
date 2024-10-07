@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from sqlalchemy.orm import joinedload
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from models import *
 import os
 import re
@@ -9,6 +11,7 @@ import re
 # initialize
 app = Flask(__name__)
 app.config.from_object('config')
+limiter = Limiter(get_remote_address, app=app, default_limits=['7 per minute'])
 
 # Create the upload folder if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -43,6 +46,7 @@ def login_page():
     return render_template('login.html')
 
 @app.route('/login', methods=['POST'])
+@limiter.limit('7 per minute')
 def login():
     username = request.form['username']
     password = request.form['password']

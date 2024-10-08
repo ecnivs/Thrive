@@ -19,14 +19,14 @@
                 </div>
             {% endif %}
         {% endwith %}
-        
-        <form action="{{ url_for('signup') }}" method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Sign Up</button>
-        </form>
-        <div class="login-link">
-            <p>Already have an account? <a href="{{ url_for('login_page') }}">Login</a></p>
-        </div>
-    </div>
+    
+    <form action="{{ url_for('signup') }}" method="POST">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Sign Up</button>
+    </form>
+    <div class="login-link">
+        <p>Already have an account? <a href="{{ url_for('login_page') }}">Login</a></p>
+    </div></div>
+
 {% endblock %}

@@ -35,7 +35,7 @@
         </p>
     </div>
 
-    {% if session['user_id'] != user.id %}
+       {% if session['user_id'] != user.id %}
         <div class="follow-unfollow">
             {% if is_following %}
                 <form action="{{ url_for('unfollow', user_id=user.id) }}" method="POST">
@@ -90,16 +90,13 @@
 function openFollowersModal() {
     document.getElementById("followersModal").style.display = "block";
 }
-
 function openFollowingModal() {
     document.getElementById("followingModal").style.display = "block";
 }
-
 function closeModal() {
     document.getElementById("followersModal").style.display = "none";
     document.getElementById("followingModal").style.display = "none";
 }
-
 window.onclick = function(event) {
     if (event.target.classList.contains('modal')) {
         closeModal();

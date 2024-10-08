@@ -58,7 +58,7 @@
 
         window.onload = function() {
             toggleCustomInput();
-        };"{% if profile.name != 'Just Another User' %}{{ profile.name }}{% endif %}"
+        };
 
         function validateForm() {
             const nameInput = document.querySelector('input[name="name"]');

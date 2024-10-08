@@ -20,7 +20,7 @@ with app.app_context():
     db.create_all()
 
 @app.errorhandler(RequestEntityTooLarge)
-def handle_large_file_error(error):
+def handle_large_file_error(_):
     flash("The uploaded file must be smaller than 5 MB.", "error")
     return redirect(url_for('profile_form', user_id=session.get('user_id')))
 
@@ -118,8 +118,9 @@ def profile_form(user_id):
         if 'picture' in request.files:
             file = request.files['picture']
             if file.filename:
-                filename = secure_filename(file.filename)
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                _ = secure_filename(file.filename)
+                unique_filename = f"{user_id}_{_}"
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
 
                 if not os.path.exists(app.config['UPLOAD_FOLDER']):
                     os.makedirs(app.config['UPLOAD_FOLDER'])
@@ -129,7 +130,7 @@ def profile_form(user_id):
                     if os.path.exists(old_picture_path):
                         os.remove(old_picture_path)
 
-                profile.profile_picture = filename
+                profile.profile_picture = unique_filename
                 file.save(file_path)
 
         if profile:

@@ -70,33 +70,37 @@ def signup():
 
         if not re.match("^[a-z0-9_-]+$", username):
             flash("Username cannot contain special characters.", "error")
-            return render_template('signup.html')
+            return redirect(url_for('signup'))
 
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
             flash("Username already taken. Please choose a different one.", "error")
-            return render_template('signup.html')
+            return redirect(url_for('signup'))
 
         new_user = User(username=username, password=generate_password_hash(password))
         db.session.add(new_user)
+        db.session.commit()
+
+        default_name = "Just Another User"
+        new_profile = Profile(user_id=new_user.id, name=default_name, bio="", gender="")
+        db.session.add(new_profile)
         db.session.commit()
 
         if new_user.id != 1:
             follow_relationship = Follow(follower_id=new_user.id, followed_id=1)
             db.session.add(follow_relationship)
             db.session.commit()
-        
+
         session['username'] = username
         session['user_id'] = new_user.id
         flash("Account created successfully! Please fill out your profile.", "success")
         return redirect(url_for('profile_form', user_id=new_user.id))
-
     return render_template('signup.html')
 
 @app.route('/profile/<int:user_id>', methods=['GET', 'POST'])
 def profile_form(user_id):
     profile = Profile.query.filter_by(user_id=user_id).first()
-    
+
     if 'user_id' not in session or session['user_id'] != user_id:
         flash("You are not authorized to edit this profile.", "error")
         return redirect(url_for('home'))
@@ -104,6 +108,12 @@ def profile_form(user_id):
     if request.method == 'POST':
         name = request.form['name'].strip()
         bio = request.form['bio'].strip()
+        gender = request.form['gender']
+
+        if gender == 'Custom':
+            custom_gender = request.form['custom_gender'].strip()
+            if custom_gender:
+                gender = custom_gender
 
         if 'picture' in request.files:
             file = request.files['picture']
@@ -111,24 +121,24 @@ def profile_form(user_id):
                 filename = secure_filename(file.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
-                if profile:
-                    if profile.profile_picture:
-                        old_picture_path = os.path.join(app.config['UPLOAD_FOLDER'], profile.profile_picture)
-                        if os.path.exists(old_picture_path):
-                            os.remove(old_picture_path)
+                if not os.path.exists(app.config['UPLOAD_FOLDER']):
+                    os.makedirs(app.config['UPLOAD_FOLDER'])
 
-                    profile.profile_picture = filename
-                else:
-                    profile = Profile(user_id=user_id, name=name, bio=bio, profile_picture=filename)
-                    db.session.add(profile)
-                    
+                if profile and profile.profile_picture:
+                    old_picture_path = os.path.join(app.config['UPLOAD_FOLDER'], profile.profile_picture)
+                    if os.path.exists(old_picture_path):
+                        os.remove(old_picture_path)
+
+                profile.profile_picture = filename
                 file.save(file_path)
 
         if profile:
-            profile.name = name
+            if name:
+                profile.name = name
             profile.bio = bio
+            profile.gender = gender
         else:
-            profile = Profile(user_id=user_id, name=name, bio=bio)
+            profile = Profile(user_id=user_id, name=name, bio=bio, gender=gender)
             db.session.add(profile)
 
         db.session.commit()

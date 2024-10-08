@@ -24,15 +24,58 @@
         {% endwith %}
 
         <form action="{{ url_for('profile_form', user_id=user_id) }}" method="POST" enctype="multipart/form-data">
-            <input type="text" name="name" placeholder="Name" value="{{ profile.name }}" required>
+            <input type="text" name="name" placeholder="Name"
+                    value="{% if profile.name != 'Just Another User' %}{{ profile.name }}{% endif %}" required>
             <textarea name="bio" placeholder="Tell us about yourself...">{{ profile.bio }}</textarea>
+
+            <label style="font-family:monospace; color:white;" for="gender">Gender:</label>
+            <select id="gender" name="gender" onchange="toggleCustomInput()" required>
+                <option value="Male" {% if profile.gender == 'Male' or profile.gender is none %}selected{% endif %}>Male</option>
+                <option value="Female" {% if profile.gender == 'Female' %}selected{% endif %}>Female</option>
+                <option value="Prefer not to say" {% if profile.gender == 'Prefer not to say' %}selected{% endif %}>Prefer not to say</option>
+                <option value="Custom" {% if profile.gender and profile.gender not in ['Male', 'Female', 'Prefer not to say'] %}selected{% endif %}>Custom</option>
+            </select>
+
+            <input type="text" id="custom_gender" name="custom_gender" placeholder="Enter your gender" style="display: none;" value="{{ profile.gender if profile.gender not in ['Female', 'Male', 'Prefer not to say'] else '' }}">
+            
+            <br><br>
+
             <input type="file" name="picture" id="picture" accept="image/*">
             <button type="submit">Update Profile</button>
         </form>
 
+    <script defer>
+        function toggleCustomInput() {
+            var genderSelect = document.getElementById('gender');
+            var customGenderInput = document.getElementById('custom_gender');
+            
+            if (genderSelect.value === 'Custom') {
+                customGenderInput.style.display = 'block';
+            } else {
+                customGenderInput.style.display = 'none';
+            }
+        }
+
+        window.onload = function() {
+            toggleCustomInput();
+        };"{% if profile.name != 'Just Another User' %}{{ profile.name }}{% endif %}"
+
+        function validateForm() {
+            const nameInput = document.querySelector('input[name="name"]');
+            if (!nameInput.value.trim()) {
+                alert('Please enter your name.');
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+        {% if profile.name != 'Just Another User' %}
         <div class="navigation">
             <p><a href="{{ url_for('user_profile', user_id=user_id) }}">Back to Profile</a></p>
         </div>
+        {% endif %}
+
     </div>
 </body>
 </html>

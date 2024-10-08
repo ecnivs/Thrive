@@ -67,3 +67,4 @@ class Profile(db.Model):
     name = db.Column(db.String(150), nullable=True)
     bio = db.Column(db.Text, nullable=True)
     profile_picture = db.Column(db.String(150), nullable=True)
+    gender = db.Column(db.String(100), nullable=False)

@@ -23,9 +23,9 @@
             <div>
                 <a href="{{ url_for('user_profile', user_id=user.id) }}" 
                            style="text-decoration: none; color: #7a78ba;">
-                        <strong>{{ user.profile.name }}</strong>
+                        <strong style="font-size: 15px;">{{ user.username }}</strong>
                 <br>
-                <span style="color: white;">{{ user.username }}</span>
+                <span style="color: white;">{{ user.profile.name }}</span>
                 </a>
             </div>
         </div>

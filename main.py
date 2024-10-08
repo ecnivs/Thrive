@@ -50,8 +50,8 @@ def login_page():
 
 @app.route('/login', methods=['POST'])
 def login():
-    username = request.form['username']
-    password = request.form['password']
+    username = request.form['username'].strip()
+    password = request.form['password'].strip()
     user = User.query.filter_by(username=username).first()
 
     if user and check_password_hash(user.password, password):

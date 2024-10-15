@@ -86,11 +86,6 @@ def signup():
         db.session.add(new_profile)
         db.session.commit()
 
-        if new_user.id != 1:
-            follow_relationship = Follow(follower_id=new_user.id, followed_id=1)
-            db.session.add(follow_relationship)
-            db.session.commit()
-
         session['username'] = username
         session['user_id'] = new_user.id
         flash("Account created successfully! Please fill out your profile.", "success")

@@ -19,6 +19,7 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+# limit file size
 @app.errorhandler(RequestEntityTooLarge)
 def handle_large_file_error(_):
     flash("The uploaded file must be smaller than 5 MB.", "error")
